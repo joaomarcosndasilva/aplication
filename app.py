@@ -2,6 +2,7 @@
 import streamlit as st
 import datetime
 from functions import *
+from mensagens import *
 
 empresas = criar_lista_b3()
 st.set_page_config(page_icon=':alien:', page_title='MoneyMagic', layout='centered' )
@@ -9,10 +10,12 @@ st.set_page_config(page_icon=':alien:', page_title='MoneyMagic', layout='centere
 st.sidebar.header('Bem vindo(a) :nerd_face:')
 
 def seleciona_pagina():
-    option = st.sidebar.selectbox('Slecione a uma página', ['Inicial', 'Gráfico', 'Tabela', 'Estatístico', 'Explorador Estatístico',
+    option = st.sidebar.selectbox('Slecione a uma página', ['Inicial', 'Quem é JBrutus?', 'Gráfico', 'Tabela', 'Estatístico', 'Explorador Estatístico',
                                                              'Previsão', 'Portifólio' ])
     if option == 'Inicial':
-        pagina_inicial()    
+        pagina_inicial()
+    elif option == 'Quem é JBrutus?':
+        pagina_apresentacao()    
     elif option == 'Gráfico':
         grafico()
     elif option == 'Tabela':
@@ -29,12 +32,17 @@ def seleciona_pagina():
 def pagina_inicial():
     cria_pagina_inicial()
 
+def pagina_apresentacao():
+    criar_pagina_apresentacao()
+
 def data_frame():
     ativo = st.sidebar.selectbox('Selecione uma empresa', empresas)
     periodo = st.sidebar.slider('Selecione a quantidade de anos', value=5, min_value=1, max_value=20)
     st.header(f'Cotação do ativo {ativo} por {periodo} anos')
     df, ativo, anos = baixar_dados(ativo, periodo)
+    mensagem_tabela()
     st.dataframe(df)
+    
 
 def grafico():
     ativo = st.sidebar.selectbox(f'Selecione um dos {len(empresas)} ativos do IBOV', empresas)
@@ -43,6 +51,7 @@ def grafico():
     df, ativo, anos = baixar_dados(ativo, periodo)
     option = st.sidebar.radio('Selecione um dos dois tipos de gráficos', ['Gráfico Simples', 'Gráfico Iterativo'])
     if option == 'Gráfico Simples':
+        mensagem_graficos()
         criar_grafico(df, ativo, anos)
     else:
         try:
@@ -53,7 +62,7 @@ def grafico():
 def estatistico():
     ativo = st.sidebar.selectbox('Selecione uma empresa', empresas)
     periodo = st.sidebar.slider('Selecione a quantidade de anos', value=5, min_value=1, max_value=20)
-    st.header(f'Estudo estatístico para o ativo {ativo}')
+    st.header(f'Estudo estatístico para o ativo {ativo} :fire:')
     with st.spinner('Gerando gráfico estatístico, por favor aguarde...'):
         criar_estatistico(ativo, periodo)
     
@@ -61,12 +70,11 @@ def explorador_estatistico():
     st.header('Explorador Estatístico :male_detective:')
     periodo = st.sidebar.slider('Selecione a quantidade de anos', value=5, min_value=1, max_value=20)
     st.sidebar.write('Role a tela para baixo e leia o texto após os gráficos')
-    st.write('''Vamos passar o pente fino em todos os ativos que compõe o índice B3;
-                \n\nO Game é simples: qual estiver dando oportunidade, passará pelo primeiro filtro, este terá uma PROBABILIDADE de colocarmos nosso dinheiro;
-                \n\nEssa é uma técnica diferente da qual Warren Buffet, Luis Barsi e outros gurus do mercado usam, então não confundam as coisas pois
-                esse univérso é um leque de várias oportunidades de se ganhar dinheiro, por isso dividiremos nosso capital em algumas partes.''')
-    btn = st.sidebar.button('RODAR O EXPLORADOR')
+    mensagem_explorador_estatistico()
+    st.subheader('Clique no botão para avaliar todas as empresas da B3 utilizando a técnica estatística de variação do preço.')
+    btn = st.button('RODAR O EXPLORADOR')
     if btn:
+        st.header(':fire:'*7)
         executar_explorador_estatistico(periodo)
         
 def previsao():

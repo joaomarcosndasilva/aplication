@@ -6,28 +6,21 @@ import warnings
 import streamlit as st
 from time import sleep
 warnings.filterwarnings('ignore')
+from mensagens import *
 
 # https://streamlit-emoji-shortcodes-streamlit-app-gwckff.streamlit.app/ -> ícones
 
 def cria_pagina_inicial():
-    st.sidebar.success('Previsão de preços com IA')
-    st.sidebar.error('Ganho com estatística')
-    st.sidebar.warning('Melhores indicadores gráficos')
-    st.sidebar.info('Técnicas fundamentalista')
-    st.header('Bem vindo à utilização de IA e Machine Learning para ganhar dinheiro no mercado de ações! :wink:')
-    st.subheader('Criei essa página para vc que já está cansado de testar várias técnicas e ver seus ganhos serem não muito superiori a alguns CDBs.')
-    st.write("""Meu Querido(a)
-              Meu nome é João Marcos, sou economista, engenheiro de software com especialização em engenharia de IA e durante alguns anos
-             testei divérsos métodos de maximização de renda/ trades e percebi o que mais pode te atrapalhar é a ganância de ganhar dinheiro e
-             a falta deuma resiliência em métoddos que realmente funcionem.\n\nO Mercado é dinâmico e muda o tempo todo e estar preparado para iddo
-             é fundamental.\n\nNão vou te prometer o 'Santo Grau' mas aqui te darei técnicas que realmente funcionam e, o principal:
-             \n\nEu vou estar aqui operando com você com o meu próprio dinheiro e postando notas de corretagem, pontos de compras, etc...""")
-    st.success('Te desejo uma boa jornada com bons ganhos para nós')
-    
+    mensagen_inicial()
+
+
+def criar_pagina_apresentacao():
+    mensagem_apresentacao()
+
 def criar_lista_b3():
     acoes = pd.read_excel('ibov.xls')
-    acoes = acoes['IBOV - Carteira do Dia 02/06/26']
-    acoes = acoes.values[1:-2].tolist()
+    acoes = acoes['IBOV - Carteira do Dia 27/07/26']
+    acoes = acoes.values[1:-3].tolist()
 
     return acoes
 
@@ -53,7 +46,7 @@ def criar_grafico(df, ativo, anos):
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
 
-    fig, ax = plt.subplots(figsize=(18,7))
+    fig, ax = plt.subplots(figsize=(14,8))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=90))
     ax.xaxis.set_tick_params(rotation=30)
@@ -82,6 +75,7 @@ def criar_estatistico(ativo, periodo, grafico=True):
     pmax = min(max(df['close_change']), p75 + 1.5 * (p75 - p25))
 
     if grafico:
+        mensagem_estatistico1()
         fig = plt.figure(figsize=(12, 8))
         gs = grid.GridSpec(2, 2)
 
@@ -115,7 +109,8 @@ def criar_estatistico(ativo, periodo, grafico=True):
 
         
         # Pontos de compra
-        st.subheader("""\n\nPontos de compra no passado do gráfico de acordo com nossa estratégia...\n\n""")
+        st.subheader("""\n\nPontos de compra de acordo com essa estratégia\n\n""")
+        mensagem_estatistico2()
         fig, ax = plt.subplots(figsize=(16, 8))
 
         ax.plot(data['Close'])
