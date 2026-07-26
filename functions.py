@@ -12,7 +12,10 @@ from mensagens import *
 
 def cria_pagina_inicial():
     mensagen_inicial()
+    mensagem_legislacao_curta()
 
+def criar_pagina_disclaimer():
+    mensagem_para_pagina_legislacao()
 
 def criar_pagina_apresentacao():
     mensagem_apresentacao()
