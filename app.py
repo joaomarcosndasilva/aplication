@@ -17,10 +17,12 @@ st.set_page_config(page_icon=':alien:', page_title='MoneyMagic', layout='centere
 st.sidebar.header('Bem vindo(a) :nerd_face:')
 
 def seleciona_pagina():
-    option = st.sidebar.selectbox('Slecione a uma página', ['Inicial', 'Quem é JBrutus?', 'Gráfico', 'Tabela', 'Estatístico', 'Explorador Estatístico',
+    option = st.sidebar.selectbox('Slecione a uma página', ['Inicial', 'Disclaimer', 'Quem é JBrutus?', 'Gráfico', 'Tabela', 'Estatístico', 'Explorador Estatístico',
                                                              'Previsão', 'Portifólio' ])
     if option == 'Inicial':
         pagina_inicial()
+    elif option == 'Disclaimer':
+        pagina_disclaimer()
     elif option == 'Quem é JBrutus?':
         pagina_apresentacao()    
     elif option == 'Gráfico':
@@ -38,6 +40,10 @@ def seleciona_pagina():
 
 def pagina_inicial():
     cria_pagina_inicial()
+    mensagem_legislacao_curta()
+
+def pagina_disclaimer():
+    mensagem_legislacao()
 
 def pagina_apresentacao():
     criar_pagina_apresentacao()
@@ -54,12 +60,14 @@ def data_frame():
 def grafico():
     ativo = st.sidebar.selectbox(f'Selecione um dos {len(empresas)} ativos do IBOV', empresas)
     periodo = st.sidebar.slider('Selecione a quantidade de anos', value=5, min_value=1, max_value=20)
-    st.header(f'Gráfico do ativo {ativo} por {periodo} anos :office:')
+    st.header(f'Gráfico do ativo {ativo} por {periodo} anos. :chart_with_upwards_trend: :chart_with_upwards_trend:')
     df, ativo, anos = baixar_dados(ativo, periodo)
     option = st.sidebar.radio('Selecione um dos dois tipos de gráficos', ['Gráfico Simples', 'Gráfico Iterativo'])
     if option == 'Gráfico Simples':
         mensagem_graficos()
         criar_grafico(df, ativo, anos)
+        st.info('Em breve vou postar o gráfico interativo com plotly, mas por enquanto vamos usar o matplotlib que é mais simples e rápido de gerar os gráficos. :hugs:')
+
     else:
         try:
             st.write('Aqui secriará um gráfico iterativo com plotly em breve')
@@ -69,7 +77,8 @@ def grafico():
 def estatistico():
     ativo = st.sidebar.selectbox('Selecione uma empresa', empresas)
     periodo = st.sidebar.slider('Selecione a quantidade de anos', value=5, min_value=1, max_value=20)
-    st.header(f'Estudo estatístico para o ativo {ativo} :fire:')
+    mensagem_legislacao_curta()
+    st.header(f'Estudo estatístico para o ativo {ativo} :bar_chart:')
     with st.spinner('Gerando gráfico estatístico, por favor aguarde...'):
         criar_estatistico(ativo, periodo)
     
@@ -78,6 +87,7 @@ def explorador_estatistico():
     periodo = st.sidebar.slider('Selecione a quantidade de anos', value=5, min_value=1, max_value=20)
     st.sidebar.write('Role a tela para baixo e leia o texto após os gráficos')
     mensagem_explorador_estatistico()
+    mensagem_legislacao_curta()
     st.subheader('Clique no botão para avaliar todas as empresas da B3 utilizando a técnica estatística de variação do preço.')
     btn = st.button('RODAR O EXPLORADOR')
     if btn:
@@ -87,15 +97,16 @@ def explorador_estatistico():
 def previsao():
     ativo = st.sidebar.selectbox('Selecione uma empresa', empresas)
     periodo = st.sidebar.slider('Selecione a quantidade de anos', value=5, min_value=1, max_value=20)
-    st.header(f'Previsão do ativo {ativo} por {periodo} anos :money_mouth_face:')
+    st.header(f'Previsão do ativo {ativo} por {periodo} anos :dollar: :money_with_wings:')
     st.write(f'Nessa parte famos usar aprendizado de máquina para prever o preço de fechamento futuro do ativo {ativo} utilizando dados de aprendizado de {periodo} anos')
     df, ativo, anos = baixar_dados(ativo, periodo)
     df, ativo, anos, ultima_cotacao = tratar_dados(df, ativo, anos)
     modelar_dados(df, ativo, anos, ultima_cotacao)
+    mensagem_legislacao_curta()
 
 def portifolio():
     st.header('OTIMIZADRO DE AÇÕES :male_detective:')
-    st.write("""Selecione uma ou mais empresas e clique no botão para calcular a melhor combinação para obter o maior rendimento.""")
+    mensagem_portifolio()
     st.sidebar.success('OTIMIZADOR DE PORTIFÓLIO')
     # valor
     valor_investido = st.sidebar.number_input('Valor do Portifólio', min_value=1000, max_value=1000000, value=10000)
@@ -108,6 +119,7 @@ def portifolio():
     data_inicial = st.sidebar.date_input('Insira a data inicial', datetime(2026, 1, 1))
     data_final = st.sidebar.date_input("Insira da data final", datetime.today())
     botao = st.sidebar.button('CALCULAR')
+    mensagem_legislacao_curta()
     
     if botao:
         with st.spinner('Calculando a melhor combinação das empresas selecionadas...'):

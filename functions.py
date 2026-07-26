@@ -46,7 +46,7 @@ def criar_grafico(df, ativo, anos):
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
 
-    fig, ax = plt.subplots(figsize=(14,8))
+    fig, ax = plt.subplots(figsize=(14,7))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=90))
     ax.xaxis.set_tick_params(rotation=30)
@@ -109,7 +109,7 @@ def criar_estatistico(ativo, periodo, grafico=True):
 
         
         # Pontos de compra
-        st.subheader("""\n\nPontos de compra de acordo com essa estratégia\n\n""")
+        st.subheader("""\n\nPontos de compra de acordo com essa estratégia :dart:\n\n""")
         mensagem_estatistico2()
         fig, ax = plt.subplots(figsize=(16, 8))
 
