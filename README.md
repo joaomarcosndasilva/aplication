@@ -1,1 +1,1 @@
-# aplication
+Aplicação bem completa com vários métodos de maximização de investimentos e especulações. També inclui vários indicadores de preço volume e, a cereja do bolo, o que há de mais moderno em IA e Machine Learning fazendo uso de aprendizado supervisionado, não supervidionado e aprendizado por reforço
