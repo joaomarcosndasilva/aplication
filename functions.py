@@ -12,10 +12,11 @@ from mensagens import *
 
 def cria_pagina_inicial():
     mensagen_inicial()
-    mensagem_legislacao_curta()
+    mensagem_fim_pagina()
 
 def criar_pagina_disclaimer():
     mensagem_para_pagina_legislacao()
+    mensagem_fim_pagina()
 
 def criar_pagina_apresentacao():
     mensagem_apresentacao()
@@ -62,6 +63,7 @@ def criar_grafico(df, ativo, anos):
     plt.legend()
 
     st.pyplot(fig)
+    mensagem_fim_pagina()
 
 def criar_estatistico(ativo, periodo, grafico=True):
     #"""Calcula indicadores estatísticos para tomada de decisão e retorna ou não um gráfico"""
@@ -93,7 +95,7 @@ def criar_estatistico(ativo, periodo, grafico=True):
         ax.set_title('Variação (%) do preço', color='k', fontsize=14)
         ax.axhline(pmin, linestyle='--', label='Preço Mínimo')
         ax.axhline(pmax, color='red', linestyle='--', label='Preço Máximo')
-        ax.scatter(ultima_cotacao.index, ultima_cotacao.close_change, color='purple', label='Último preço')
+        #ax.scatter(ultima_cotacao.index, ultima_cotacao.close_change, color='purple', label='Último preço')
         ax.legend()
 
         ax = fig.add_subplot(gs[1, 1])
@@ -127,8 +129,10 @@ def criar_estatistico(ativo, periodo, grafico=True):
             ax.annotate('Venda', xy=(i, c.Close), xytext=(i, c.Close + 0.6),
                         arrowprops=dict(facecolor='red', shrink=0.05))
         st.pyplot(fig)
-
+        mensagem_fim_pagina()
+   
     return df, pmin, pmax
+    
     
 def executar_explorador_estatistico(anos_estudo=5):
     #""" Faz um loop e compara todas as empresas do ibovespa, filtrando as que se encaixarem na estratégia estatística """
@@ -151,9 +155,11 @@ def executar_explorador_estatistico(anos_estudo=5):
             st.success(f'Fim da análise de {cia}')
             st.header('\n\n')
         st.write('\n\nO ídeal é rodar esse método todos os dias, muitas vezes temos oportunidades de ganhos diáriamente')
+        st.info('Fim do explorador estatístico. :tada: :tada: :tada:')
     except:
         st.error('Ocorreu um problema ao rodar o explorador de ações. Tente mais uma vez, por favor ')
 
+    
 def modelar_dados(df, ativo, anos, ultima_cotacao):
     """Importa as bibliotecas necessárias para fazer modelar os dados e assim executar a previsão..."""
     with st.spinner('Importando os pacotes necessários...'):
@@ -206,21 +212,24 @@ def modelar_dados(df, ativo, anos, ultima_cotacao):
         sleep(1)
         import matplotlib.pyplot as plt
         import matplotlib.dates as mdates
-        fig, ax = plt.subplots(figsize=(12,4))
+        fig, ax = plt.subplots(figsize=(14, 7))
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
         ax.xaxis.set_major_locator(mdates.DayLocator(interval=1))
         ax.xaxis.set_tick_params(rotation=60)
-        ax.set_title(f'Teste do ativo {ativo.upper()} dos ultimos 15 dias de pregão...', fontsize=18)
+        ax.set_title(f'Teste do modelo com o ativo {ativo.upper()} nos ultimos 15 pregões', fontsize=22)
         ax.set_ylabel('Valor em R$', fontsize=14)
         ax.plot(data.index, data['Y Teste'], label='Real', color='blue', marker='o')
         ax.plot(data.index, data['Modelo'], label='Previsão', color='red', marker='o')
-        ax.scatter(ultima_cotacao.index, preco_fechamento_futuro, label=f'Previsão R$ {round(preco_fechamento_futuro[0], 2)}', 
-                   color='purple', marker='^')
+        #ax.scatter(ultima_cotacao.index, preco_fechamento_futuro, label=f'Previsão R$ {round(preco_fechamento_futuro[0], 2)}', 
+        #           color='purple', marker='^')
         plt.grid()
         plt.legend()
 
         st.pyplot(fig)
-        st.success(f'Previsão para preço de fechamento do próximo pregão: R$ {round(preco_fechamento_futuro[0], 2):.2f}')
+        st.success(':mega: Observe o comportamento do modelo: linha azul são os dados reais e a linha vermelha são as previsões do modelo. Todas essas cotações foram usadas para testar o modelo de maneira que foram separadas no ínicio do processo de treinamento.')
+        #st.success(f'Previsão para preço de fechamento do próximo pregão: R$ {round(preco_fechamento_futuro[0], 2):.2f}')
+        st.error('Infelizmente não posso compartilhar mais a previsão para o dia posterior (comentei essa parte do código), pois isso caracterizaria recomendação de compra ou venda de ativos. :hugs:')
+        st.info('Fim da previsão do modelo. :tada: :tada: :tada:')
 
 #################### PARTE DO PORTIFÓLIO ######################################
 
