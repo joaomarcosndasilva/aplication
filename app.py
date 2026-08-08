@@ -98,8 +98,8 @@ def explorador_estatistico():
     st.info(':point_up_2: Clique aqui para gerar um estudo estatistico de todas as empresas da B3. Esse estudo é baseado na variação do preço de fechamento do ativo, e não é recomendação de compra ou venda de ativos. :hugs:')
     if btn:
         st.header(':fire:'*15)
-        #executar_explorador_estatistico(periodo)
-        mensagem_legislacao_estatistico()
+        executar_explorador_estatistico(periodo)
+        #mensagem_legislacao_estatistico()
         mensagem_fim_pagina()
         
 def previsao():

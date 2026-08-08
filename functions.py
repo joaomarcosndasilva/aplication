@@ -95,7 +95,7 @@ def criar_estatistico(ativo, periodo, grafico=True):
         ax.set_title('Variação (%) do preço', color='k', fontsize=14)
         ax.axhline(pmin, linestyle='--', label='Preço Mínimo')
         ax.axhline(pmax, color='red', linestyle='--', label='Preço Máximo')
-        #ax.scatter(ultima_cotacao.index, ultima_cotacao.close_change, color='purple', label='Último preço')
+        ax.scatter(ultima_cotacao.index, ultima_cotacao.close_change, color='orange', s=100,  label='Último preço')
         ax.legend()
 
         ax = fig.add_subplot(gs[1, 1])
@@ -220,14 +220,14 @@ def modelar_dados(df, ativo, anos, ultima_cotacao):
         ax.set_ylabel('Valor em R$', fontsize=14)
         ax.plot(data.index, data['Y Teste'], label='Real', color='blue', marker='o')
         ax.plot(data.index, data['Modelo'], label='Previsão', color='red', marker='o')
-        #ax.scatter(ultima_cotacao.index, preco_fechamento_futuro, label=f'Previsão R$ {round(preco_fechamento_futuro[0], 2)}', 
-        #           color='purple', marker='^')
+        ax.scatter(ultima_cotacao.index, preco_fechamento_futuro, label=f'Previsão R$ {round(preco_fechamento_futuro[0], 2)}', 
+                   color='purple', marker='^')
         plt.grid()
         plt.legend()
 
         st.pyplot(fig)
         st.success(':mega: Observe o comportamento do modelo: linha azul são os dados reais e a linha vermelha são as previsões do modelo. Todas essas cotações foram usadas para testar o modelo de maneira que foram separadas no ínicio do processo de treinamento.')
-        #st.success(f'Previsão para preço de fechamento do próximo pregão: R$ {round(preco_fechamento_futuro[0], 2):.2f}')
+        st.success(f'Previsão para preço de fechamento do próximo pregão: R$ {round(preco_fechamento_futuro[0], 2):.2f}')
         st.error('Infelizmente não posso compartilhar mais a previsão para o dia posterior (comentei essa parte do código), pois isso caracterizaria recomendação de compra ou venda de ativos. :hugs:')
         st.info('Fim da previsão do modelo. :tada: :tada: :tada:')
 
